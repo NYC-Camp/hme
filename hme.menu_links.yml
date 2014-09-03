@@ -1,0 +1,5 @@
+siren_mapper.list:
+  title: Siren Mappers
+  description: 'Administer the siren mapper entities'
+  parent: system.admin_structure
+  route_name: siren_mapper.list

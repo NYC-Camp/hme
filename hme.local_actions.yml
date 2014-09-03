@@ -1,0 +1,5 @@
+siren_mapper.add:
+  route_name: 'siren_mapper.add'
+  title: 'Add siren mapper'
+  appears_on:
+    - siren_mapper.list

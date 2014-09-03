@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * Contails \Drupal\hme\hme.module
+ */
+
+use \Drupal\hme\Entity\SirenMapperEntity;
+
+/**
+ * Menu argument loader. Returns a siren mapper entity
+ *
+ * @param $id
+ * @return \Drupal\Core\Entity\EntityInterface|static
+ */
+function siren_mapper_load($id)
+{
+    return SirenMapperEntity::load($id);
+}

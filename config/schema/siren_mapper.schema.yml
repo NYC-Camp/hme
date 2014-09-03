@@ -1,0 +1,30 @@
+# Schema for the configuration files of the Hypermedia Engine module
+hme.siren_mapper.*:
+  type: mapping
+  label: 'Siren Mapper'
+  mapping:
+    id:
+      type: string
+      label: 'Siren Mapper identifier'
+    uuid:
+      type: string
+      label: 'UUID'
+    name:
+      type: label
+      label: 'Name'
+    entityType:
+      type: string
+      label: 'Entity'
+    bundleType:
+      type: string
+      label: 'Bundle'
+    fieldMappings:
+      type: sequence
+      sequence:
+        - type: mapping
+          mapping:
+            fieldName:
+              type: string
+            sirenName:
+              type: string
+

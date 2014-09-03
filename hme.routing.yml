@@ -1,0 +1,28 @@
+siren_mapper.list:
+  path: '/admin/structure/siren-mappers'
+  defaults:
+    _entity_list: 'siren_mapper'
+    _title: 'Siren Mappers'
+  requirements:
+    _permission: 'administer site configuration'
+siren_mapper.add:
+  path: '/admin/structure/siren-mappers/add'
+  defaults:
+    _entity_form: 'siren_mapper.add'
+    _title: 'Add a new siren mapper'
+  requirements:
+    _permission: 'administer site configuration'
+siren_mapper.edit:
+  path: '/admin/structure/siren-mappers/edit/{siren_mapper}'
+  defaults:
+    _entity_form: 'siren_mapper.edit'
+    _title: 'Edit siren mapper'
+  requirements:
+    _permission: 'administer site configuration'
+siren_mapper.delete:
+  path: '/admin/structure/siren-mappers/delete/{siren_mapper}'
+  defaults:
+    _entity_form: 'siren_mapper.delete'
+    _title: 'Delete siren mapper'
+  requirements:
+    _permission: 'administer site configuration'

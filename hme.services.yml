@@ -1,0 +1,9 @@
+services:
+  serializer.encoder.siren:
+    class: Drupal\hme\Encoder\JsonEncoder
+    tags:
+      - { name: encoder, priority: 10, format: siren_json }
+  hme.subscriber:
+    class: Drupal\hme\SirenSubscriber
+    tags:
+      - { name: event_subscriber }
