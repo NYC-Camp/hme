@@ -69,6 +69,24 @@ class ContentEntityNormalizer extends NormalizerBase
     }
 
     /**
+     * Override the supportsNormalization function because entities require a mapper.
+     */
+    public function supportsNormalization($data, $format = NULL)
+    {
+        $entityRefl = new \ReflectionClass($data);
+        if($entityRefl->implementsInterface($this->supportedInterfaceOrClass)) {
+            $query = $this->queryFactory->get('siren_mapper')
+                ->condition('entityType', $data->getEntityTypeId())
+                ->condition('bundleType', $data->bundle());
+            $ids = $query->execute();
+            if(empty($ids)) {
+                return false;
+            }
+        }
+        return in_array($format, $this->formats) && parent::supportsNormalization($data, $format);
+    }
+
+    /**
      * Implements \Symfony\Component\Serializer\Normalizer\NormalizerInterface::normalize()
      */
     public function normalize($entity, $format = NULL, array $context = array())
