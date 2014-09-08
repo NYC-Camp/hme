@@ -124,7 +124,7 @@ class SirenMapperForm extends EntityForm
         for($delta = 0; $delta < $max; $delta++) {
             $form['fieldMappings'][$delta]['fieldName'] = array(
                 '#type' => 'textfield',
-                '#title' => $this->t('Field Name'),
+                '#title' => $this->t('Field Name ' . $delta),
                 '#maxlength' => 255,
                 '#default_value' => $sirenMapper->fieldMappings[$delta]['fieldName'],
                 '#description' => $this->t("The field to be mapped"),
@@ -133,7 +133,7 @@ class SirenMapperForm extends EntityForm
 
             $form['fieldMappings'][$delta]['sirenName'] = array(
                 '#type' => 'textfield',
-                '#title' => $this->t('Export Name'),
+                '#title' => $this->t('Export Name ' . $delta),
                 '#maxlength' => 255,
                 '#default_value' => $sirenMapper->fieldMappings[$delta]['sirenName'],
                 '#description' => $this->t("The siren property to map to"),
