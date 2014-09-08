@@ -27,6 +27,10 @@ class SirenMapperForm extends EntityForm
         $form = parent::form($form, $form_state);
 
         $sirenMapper = $this->entity;
+        if(!isset($form_state['fields'])) {
+            $form_state['fields']['hme']['siren_mapper']['fieldMappings'] = count($sirenMapper->fieldMappings) ?: 1;
+            $form_state['fields']['hme']['classes'] = count($sirenMapper->classes) ?: 1;
+        }
 
         // Change page title for the edit operation
         if ($this->operation == 'edit') {
@@ -75,27 +79,78 @@ class SirenMapperForm extends EntityForm
         );
 
         // The field mappings for this mapper
+        $max = $form_state['fields']['hme']['classes'];
+        $form['classes'] = array(
+            '#type' => 'fieldset',
+            '#title' => $this->t('Classes'),
+            '#tree' => true,
+            '#prefix' => '<div id="classes">',
+            '#suffix' => '</div>',
+        );
+
+        for($delta = 0; $delta < $max; $delta++) {
+            $form['classes'][$delta] = array(
+                '#type' => 'textfield',
+                '#title' => $this->t('Class name'),
+                '#maxlength' => 255,
+                '#default_value' => $sirenMapper->classes[$delta],
+                '#description' => $this->t("A class that describe the nature of an entity's content."),
+            );
+        }
+
+        $form['classAdd'] = array(
+            '#type' => 'submit',
+            '#name' => 'add-class',
+            '#value' => t('Add Classes'),
+            '#submit' => array(array($this, 'addMoreClassesSubmit')),
+            '#ajax' => array(
+                'callback' => array($this, 'addMoreClassesCallback'),
+                'wrapper' => 'classes',
+                'effect' => 'fade',
+            ),
+        );
+
+
+        // The field mappings for this mapper
+        $max = $form_state['fields']['hme']['siren_mapper']['fieldMappings'];
         $form['fieldMappings'] = array(
             '#type' => 'fieldset',
             '#title' => $this->t('Field Mappings'),
             '#tree' => true,
-        );
-        $form['fieldMappings']['fieldName'] = array(
-            '#type' => 'textfield',
-            '#title' => $this->t('Field Name'),
-            '#maxlength' => 255,
-            '#default_value' => $sirenMapper->fieldMappings['fieldName'],
-            '#description' => $this->t("The field to be mapped"),
-            '#required' => TRUE,
+            '#prefix' => '<div id="field-mappings">',
+            '#suffix' => '</div>',
         );
 
-        $form['fieldMappings']['sirenName'] = array(
-            '#type' => 'textfield',
-            '#title' => $this->t('Export Name'),
-            '#maxlength' => 255,
-            '#default_value' => $sirenMapper->fieldMappings['sirenName'],
-            '#description' => $this->t("The siren property to map to"),
-            '#required' => TRUE,
+        for($delta = 0; $delta < $max; $delta++) {
+            $form['fieldMappings'][$delta]['fieldName'] = array(
+                '#type' => 'textfield',
+                '#title' => $this->t('Field Name'),
+                '#maxlength' => 255,
+                '#default_value' => $sirenMapper->fieldMappings[$delta]['fieldName'],
+                '#description' => $this->t("The field to be mapped"),
+                '#required' => TRUE,
+            );
+
+            $form['fieldMappings'][$delta]['sirenName'] = array(
+                '#type' => 'textfield',
+                '#title' => $this->t('Export Name'),
+                '#maxlength' => 255,
+                '#default_value' => $sirenMapper->fieldMappings[$delta]['sirenName'],
+                '#description' => $this->t("The siren property to map to"),
+                '#required' => TRUE,
+            );
+        }
+
+        $form['fieldMappingsAdd'] = array(
+            '#type' => 'submit',
+            '#name' => 'add-mapping',
+            '#value' => t('Add Mapping'),
+            '#submit' => array(array($this, 'addMoreMappingsSubmit')),
+            '#ajax' => array(
+                'callback' => array($this, 'addMoreMappingsCallback'),
+                'wrapper' => 'field-mappings',
+                'effect' => 'fade',
+            ),
         );
 
         return $form;
@@ -108,7 +163,6 @@ class SirenMapperForm extends EntityForm
     {
         $sirenMapper = $this->entity;
 
-        dpm($sirenMapper);
         $status = $sirenMapper->save();
 
         if ($status) {
@@ -124,5 +178,27 @@ class SirenMapperForm extends EntityForm
         }
         $url = new Url('siren_mapper.list');
         $form_state['redirect'] = $url->toString();
+    }
+
+    public function addMoreMappingsCallback(array &$form, array &$form_state)
+    {
+        return $form['fieldMappings'];
+    }
+
+    public function addMoreMappingsSubmit(array &$form, array &$form_state)
+    {
+        $form_state['fields']['hme']['siren_mapper']['fieldMappings']++;
+        $form_state['rebuild'] = TRUE;
+    }
+
+    public function addMoreClassesCallback(array &$form, array &$form_state)
+    {
+        return $form['classes'];
+    }
+
+    public function addMoreClassesSubmit(array &$form, array &$form_state)
+    {
+        $form_state['fields']['hme']['classes']++;
+        $form_state['rebuild'] = TRUE;
     }
 }

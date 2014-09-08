@@ -18,6 +18,10 @@ hme.siren_mapper.*:
     bundleType:
       type: string
       label: 'Bundle'
+    classes:
+      type: sequence
+      sequence:
+        - type: string
     fieldMappings:
       type: sequence
       sequence:
