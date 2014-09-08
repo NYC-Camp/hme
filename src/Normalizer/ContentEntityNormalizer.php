@@ -98,7 +98,12 @@ class ContentEntityNormalizer extends NormalizerBase
             "properties" => array(),
             "entities" => array(),
             "actions" => array(),
-            "links" => array(),
+            "links" => array(
+                array(
+                    "rel" => array("self"),
+                    "href" => $this->getEntityUri($entity),
+                ),
+            ),
         );
         $mapper = null;
         $query = $this->queryFactory->get('siren_mapper')
