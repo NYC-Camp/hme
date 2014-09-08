@@ -24,7 +24,7 @@ abstract class NormalizerBase extends SerializationNormalizerBase implements Nor
     protected $formats = array('siren_json');
 
     /**
-     * Implements \Symfony\Component\Serializer\NOrmalizer\NormalizerInterface::supportsNormalization().
+     * Implements \Symfony\Component\Serializer\Normalizer\NormalizerInterface::supportsNormalization().
      */
     public function supportsNormalization($data, $format = NULL)
     {
