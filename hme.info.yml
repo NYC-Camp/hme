@@ -1,6 +1,6 @@
 name: Hypermedia Engine
 type: module
-description: "Provides a Hypermedia Engine."
+description: "Provides a Hypermedia Engine and SIREN serializer."
 package: NYC Camp Hypermedia Engine
 core: 8.x
 dependencies:
