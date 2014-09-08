@@ -136,7 +136,7 @@ class ContentEntityNormalizer extends NormalizerBase
                 continue;
             }
             $normalized_property = $this->serializer->normalize($field, $format, $context);
-            $normalized['properties'] = NestedArray::mergeDeep($normalized['properties'], $normalized_property);
+            $normalized = NestedArray::mergeDeep($normalized, $normalized_property);
         }
 
         return $normalized;

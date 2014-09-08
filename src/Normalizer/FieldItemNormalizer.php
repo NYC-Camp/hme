@@ -31,7 +31,9 @@ class FieldItemNormalizer extends NormalizerBase
 
         $field = $field_item->getParent();
         return array(
-            $field->getName() => $values['value'],
+            "properties" => array(
+                $field->getName() => $values['value'],
+            ),
         );
     }
 }
