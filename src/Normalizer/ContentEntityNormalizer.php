@@ -122,7 +122,7 @@ class ContentEntityNormalizer extends NormalizerBase
             $normalized['class'] = $mapper->classes;
             foreach($mapper->fieldMappings as $mapping)
             {
-                $map_fields[] = $mapping['fieldName'];
+                $map_fields[$mapping['fieldName']] = $mapping['sirenName'];
             }
         }
         $fields = $entity->getProperties();
@@ -132,9 +132,10 @@ class ContentEntityNormalizer extends NormalizerBase
             if(in_array($field->getFieldDefinition()->getName(), $exclude)) {
                 continue;
             }
-            if(!in_array($field->getName(), $map_fields)) {
+            if(!array_key_exists($field->getName(), $map_fields)) {
                 continue;
             }
+            $context['mapped_name'] = $map_fields[$field->getName()];
             $normalized_property = $this->serializer->normalize($field, $format, $context);
             $normalized = NestedArray::mergeDeep($normalized, $normalized_property);
         }

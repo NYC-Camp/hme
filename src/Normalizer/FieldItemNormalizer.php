@@ -29,10 +29,11 @@ class FieldItemNormalizer extends NormalizerBase
     {
         $values = $field_item->toArray();
 
+        $mapped_name = $context['mapped_name'];
         $field = $field_item->getParent();
         return array(
             "properties" => array(
-                $field->getName() => $values['value'],
+                $mapped_name => $values['value'],
             ),
         );
     }
