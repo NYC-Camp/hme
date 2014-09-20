@@ -79,7 +79,7 @@ class SirenMapperForm extends EntityForm
             '#required' => TRUE,
         );
 
-        // The field mappings for this mapper
+        // The classes for the mapped entity
         $max = $form_state['fields']['hme']['classes'];
         $form['classes'] = array(
             '#type' => 'fieldset',
