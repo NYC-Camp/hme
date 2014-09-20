@@ -30,6 +30,7 @@ class SirenMapperForm extends EntityForm
         if(!isset($form_state['fields'])) {
             $form_state['fields']['hme']['siren_mapper']['fieldMappings'] = count($sirenMapper->fieldMappings) ?: 1;
             $form_state['fields']['hme']['classes'] = count($sirenMapper->classes) ?: 1;
+            $form_state['fields']['hme']['relations'] = count($sirenMapper->relations) ?: 1;
         }
 
         // Change page title for the edit operation
@@ -106,6 +107,38 @@ class SirenMapperForm extends EntityForm
             '#ajax' => array(
                 'callback' => array($this, 'addMoreClassesCallback'),
                 'wrapper' => 'classes',
+                'effect' => 'fade',
+            ),
+        );
+
+        // The relations for the mapped entity
+        $max = $form_state['fields']['hme']['relations'];
+        $form['relations'] = array(
+            '#type' => 'fieldset',
+            '#title' => $this->t('Relations'),
+            '#tree' => true,
+            '#prefix' => '<div id="relations">',
+            '#suffix' => '</div>',
+        );
+
+        for($delta = 0; $delta < $max; $delta++) {
+            $form['relations'][$delta] = array(
+                '#type' => 'textfield',
+                '#title' => $this->t('Relation name'),
+                '#maxlength' => 255,
+                '#default_value' => $sirenMapper->relations[$delta],
+                '#description' => $this->t("A relation that describes the sematics of this entity type"),
+            );
+        }
+
+        $form['relationAdd'] = array(
+            '#type' => 'submit',
+            '#name' => 'add-relation',
+            '#value' => t('Add Relations'),
+            '#submit' => array(array($this, 'addMoreRelationsSubmit')),
+            '#ajax' => array(
+                'callback' => array($this, 'addMoreRelationsCallback'),
+                'wrapper' => 'relations',
                 'effect' => 'fade',
             ),
         );
@@ -199,6 +232,17 @@ class SirenMapperForm extends EntityForm
     public function addMoreClassesSubmit(array &$form, array &$form_state)
     {
         $form_state['fields']['hme']['classes']++;
+        $form_state['rebuild'] = TRUE;
+    }
+
+    public function addMoreRelationsCallback(array &$form, array &$form_state)
+    {
+        return $form['relations'];
+    }
+
+    public function addMoreRelationsSubmit(array &$form, array &$form_state)
+    {
+        $form_state['fields']['hme']['relations']++;
         $form_state['rebuild'] = TRUE;
     }
 }

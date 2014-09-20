@@ -22,6 +22,10 @@ hme.siren_mapper.*:
       type: sequence
       sequence:
         - type: string
+    relations:
+      type: sequence
+      sequence:
+        - type: string
     fieldMappings:
       type: sequence
       sequence:

@@ -76,6 +76,13 @@ class SirenMapperEntity extends ConfigEntityBase implements SirenMapperInterface
     public $classes = array();
 
     /**
+     * The relations for this entity.
+     *
+     * @var array
+     */
+    public $relations = array();
+
+    /**
      * The Drupal field to Siren field mappings for this entity bundle type.
      *
      * @var array
