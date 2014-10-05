@@ -7,6 +7,11 @@ services:
     class: Drupal\hme\SirenSubscriber
     tags:
       - { name: event_subscriber }
+  serializer.normalizer.entity_reference_item.siren:
+    class: Drupal\hme\Normalizer\EntityReferenceItemNormalizer
+    arguments: ['@rest.link_manager', '@serializer.entity_resolver', '@entity.query']
+    tags:
+      - { name: normalizer, priority: 10 }
   serializer.normalizer.entity.siren:
     class: Drupal\hme\Normalizer\ContentEntityNormalizer
     arguments: ['@rest.link_manager', '@entity.manager', '@module_handler', '@entity.query']
