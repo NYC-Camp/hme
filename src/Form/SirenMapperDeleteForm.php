@@ -7,6 +7,7 @@
 namespace Drupal\hme\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
@@ -26,7 +27,7 @@ class SirenMapperDeleteForm extends EntityConfirmFormBase
     /**
      * {@inheritdoc}
      */
-    public function getCancelRoute()
+    public function getCancelUrl()
     {
         return new Url('siren_mapper.list');
     }
@@ -42,13 +43,13 @@ class SirenMapperDeleteForm extends EntityConfirmFormBase
     /**
      * {@inheritdoc}
      */
-    public function submit(array $form, array &$form_state)
+    public function submitForm(array &$form, FormStateInterface $form_state)
     {
         // Delete and set message
         $this->entity->delete();
         drupal_set_message($this->t('The siren mapper @label has been deleted',
             array('@label' => $this->entity->name)
         ));
-        $form_state['redirect_route'] = $this->getCancelRoute();
+        $form_state->setRedirectUrl($this->getCancelUrl());
     }
 }

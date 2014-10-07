@@ -12,6 +12,7 @@ use Drupal\rest\LinkManager\LinkManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\serialization\EntityResolver\EntityResolverInterface;
 use Drupal\serialization\EntityResolver\UuidReferenceInterface;
+use Drupal\Core\Url;
 
 /**
  * Converts the Drupal entity reference item object to SIREN subentity array structure.
@@ -68,7 +69,7 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
     {
         $entityRefl = new \ReflectionClass($data);
         if($entityRefl->isSubclassOf($this->supportedInterfaceOrClass)) {
-            $entity = entity_load($data->defaultSettings()['target_type'], $data->get("target_id")->getValue());
+            $entity = entity_load($data->getFieldDefinition()->getSetting('target_type'), $data->get("target_id")->getValue());
             $query = $this->queryFactory->get('siren_mapper')
                 ->condition('entityType', $entity->getEntityTypeId())
                 ->condition('bundleType', $entity->bundle());
@@ -108,13 +109,9 @@ class EntityReferenceItemNormalizer extends FieldItemNormalizer implements UuidR
         // Use embedded link for now until we can make a full sub-entit
         // representation feasible (using an on off switch)
         $subentity = array(
-            "class" => array(
-                $mapper->classes,
-            ),
-            "rel" => array(
-                $mapper->relations,
-            ),
-            "href" => url($target_entity->url(), array("absolute" => TRUE)),
+            "class" => $mapper->classes,
+            "rel" => $mapper->relations,
+            "href" => $target_entity->url('canonical', array("absolute" => TRUE)),
         );
 
         // If the parent entity passed in a langcode, unset it before normalizing

@@ -125,7 +125,7 @@ class ContentEntityNormalizer extends NormalizerBase
                 $map_fields[$mapping['fieldName']] = $mapping['sirenName'];
             }
         }
-        $fields = $entity->getProperties();
+        $fields = $entity->getFields();
         // Ignore the entity ID and revision ID.
         $exclude = array($entity->getEntityType()->getKey('id'), $entity->getEntityType()->getKey('revision'));
         foreach ($fields as $field) {

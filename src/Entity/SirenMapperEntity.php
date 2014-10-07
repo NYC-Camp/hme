@@ -17,8 +17,7 @@ use Drupal\hme\SirenMapperInterface;
  * @ConfigEntityType(
  *   id = "siren_mapper",
  *   label = @Translation("SIREN Mapper"),
- *   fieldable = FALSE,
- *   controllers = {
+ *   handlers = {
  *      "list_builder" = "Drupal\hme\SirenMapperListBuilder",
  *      "form" = {
  *          "add" = "Drupal\hme\Form\SirenMapperForm",

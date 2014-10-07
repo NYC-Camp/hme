@@ -10,6 +10,7 @@ namespace Drupal\hme\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
@@ -22,15 +23,20 @@ class SirenMapperForm extends EntityForm
     /**
      * {@inheritdoc}
      */
-    public function form(array $form, array &$form_state)
+    public function form(array $form, FormStateInterface $form_state)
     {
         $form = parent::form($form, $form_state);
 
         $sirenMapper = $this->entity;
-        if(!isset($form_state['fields'])) {
-            $form_state['fields']['hme']['siren_mapper']['fieldMappings'] = count($sirenMapper->fieldMappings) ?: 1;
-            $form_state['fields']['hme']['classes'] = count($sirenMapper->classes) ?: 1;
-            $form_state['fields']['hme']['relations'] = count($sirenMapper->relations) ?: 1;
+        if(!$form_state->has('fields')) {
+            $fields = array();
+            $fields['hme']['siren_mapper']['fieldMappings'] = count($sirenMapper->fieldMappings) ?: 1;
+            $fields['hme']['siren_mapper']['fieldMappings'] = count($sirenMapper->fieldMappings) ?: 1;
+            $fields['hme']['classes'] = count($sirenMapper->classes) ?: 1;
+            $fields['hme']['relations'] = count($sirenMapper->relations) ?: 1;
+            $form_state->set('fields', $fields);
+        } else {
+            $fields = $form_state->get('fields');
         }
 
         // Change page title for the edit operation
@@ -80,7 +86,7 @@ class SirenMapperForm extends EntityForm
         );
 
         // The classes for the mapped entity
-        $max = $form_state['fields']['hme']['classes'];
+        $max = $fields['hme']['classes'];
         $form['classes'] = array(
             '#type' => 'fieldset',
             '#title' => $this->t('Classes'),
@@ -112,7 +118,7 @@ class SirenMapperForm extends EntityForm
         );
 
         // The relations for the mapped entity
-        $max = $form_state['fields']['hme']['relations'];
+        $max = $fields['hme']['relations'];
         $form['relations'] = array(
             '#type' => 'fieldset',
             '#title' => $this->t('Relations'),
@@ -145,7 +151,7 @@ class SirenMapperForm extends EntityForm
 
 
         // The field mappings for this mapper
-        $max = $form_state['fields']['hme']['siren_mapper']['fieldMappings'];
+        $max = $fields['hme']['siren_mapper']['fieldMappings'];
         $form['fieldMappings'] = array(
             '#type' => 'fieldset',
             '#title' => $this->t('Field Mappings'),
@@ -192,7 +198,7 @@ class SirenMapperForm extends EntityForm
     /**
      * {@inheritdoc}
      */
-    public function save(array $form, array &$form_state)
+    public function save(array $form, FormStateInterface $form_state)
     {
         $sirenMapper = $this->entity;
 
@@ -210,39 +216,45 @@ class SirenMapperForm extends EntityForm
           )));
         }
         $url = new Url('siren_mapper.list');
-        $form_state['redirect'] = $url->toString();
+        $form_state->set('redirect', $url->toString());
     }
 
-    public function addMoreMappingsCallback(array &$form, array &$form_state)
+    public function addMoreMappingsCallback(array &$form, FormStateInterface $form_state)
     {
         return $form['fieldMappings'];
     }
 
-    public function addMoreMappingsSubmit(array &$form, array &$form_state)
+    public function addMoreMappingsSubmit(array &$form, FormStateInterface $form_state)
     {
-        $form_state['fields']['hme']['siren_mapper']['fieldMappings']++;
-        $form_state['rebuild'] = TRUE;
+        $fields = $form_state->get('fields');
+        $fields['hme']['siren_mapper']['fieldMappings']++;
+        $form_state->set('fields', $fields);
+        $form_state->setRebuild();
     }
 
-    public function addMoreClassesCallback(array &$form, array &$form_state)
+    public function addMoreClassesCallback(array &$form, FormStateInterface $form_state)
     {
         return $form['classes'];
     }
 
-    public function addMoreClassesSubmit(array &$form, array &$form_state)
+    public function addMoreClassesSubmit(array &$form, FormStateInterface $form_state)
     {
-        $form_state['fields']['hme']['classes']++;
-        $form_state['rebuild'] = TRUE;
+        $fields = $form_state->get('fields');
+        $fields['hme']['classes']++;
+        $form_state->set('fields', $fields);
+        $form_state->setRebuild();
     }
 
-    public function addMoreRelationsCallback(array &$form, array &$form_state)
+    public function addMoreRelationsCallback(array &$form, FormStateInterface $form_state)
     {
         return $form['relations'];
     }
 
-    public function addMoreRelationsSubmit(array &$form, array &$form_state)
+    public function addMoreRelationsSubmit(array &$form, FormStateInterface $form_state)
     {
-        $form_state['fields']['hme']['relations']++;
-        $form_state['rebuild'] = TRUE;
+        $fields = $form_state->get('fields');
+        $fields['hme']['relations']++;
+        $form_state->set('fields', $fields);
+        $form_state->setRebuild();
     }
 }
